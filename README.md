@@ -6,4 +6,4 @@
 </ul>
 
 <h3>Testing: npm test/ng test</h3>
-<h3>Run: npm run/ng serve</h3>
+<h3>Run: npm start/ng serve</h3>
