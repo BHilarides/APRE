@@ -1,9 +1,10 @@
 /**
- * Author: Professor Krasso
+ * Author: Professor Krasso/Ben Hilarides
  * Modified by: GitHub Copilot
- * Date: 8/8/2024
+ * Date: 8/8/2024 | 25 January 2026
  * File: main-layout.component.ts
  * Description: Main layout of the MEAN Stack Application
+ * Updated to include salesByCustomer route link and dropdown functionality
  */
 import { Component } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
@@ -307,6 +308,7 @@ export class MainLayoutComponent {
   salesReports = [
     { name: 'Sales by Region', url: '/reports/sales/sales-by-region' },
     { name: 'Sales by Region - Tabular', url: '/reports/sales/sales-by-region-tabular' },
+    { name: 'Sales by Customer', url: '/reports/sales/sales-by-customer' } // New link for SalesByCustomerComponent
     // Add more reports as needed
   ];
 

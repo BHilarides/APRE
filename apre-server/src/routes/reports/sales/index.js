@@ -91,15 +91,15 @@ router.get('/regions/:region', (req, res, next) => {
  *  .then(response => response.json())
  *  .then(data => console.log(data));
  */
-router.get('/customers/:customerId', (req, res, next) => {
+router.get('/customers/:customer', (req, res, next) => {
   try {
     mongo (async db => {
       const salesReportByCustomer = await db.collection('sales').aggregate([
-        { $match: { customerId: req.params.customerId } },
+        { $match: { customer: req.params.customer } },
         {
           $group: {
-            _id: '$customerId',
-            customerName: { $first: '$customerName' },
+            _id: '$customer',
+            customerName: { $first: '$customer' },
             totalSales: { $sum: '$amount' },
             orderCount: { $sum: 1 }
           }

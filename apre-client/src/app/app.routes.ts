@@ -1,8 +1,9 @@
 /**
- * Author: Professor Krasso
- * Date: 8/8/2024
+ * Author: Professor Krasso/Ben Hilarides
+ * Date: 8/8/2024 | 24 January 2026
  * File: app.routes.ts
  * Description: Application routes
+ * Updated to include routes for SalesByCustomerComponent via Sales Report Routes
  */
 
 // Import the necessary modules
@@ -25,6 +26,7 @@ import { CallDurationByDateRangeComponent } from './reports/agent-performance/ca
 import { ChannelRatingByMonthComponent } from './reports/customer-feedback/channel-rating-by-month/channel-rating-by-month.component';
 import { CustomerFeedbackComponent } from './reports/customer-feedback/customer-feedback.component';
 import { SalesByRegionTabularComponent } from './reports/sales/sales-by-region-tabular/sales-by-region-tabular.component';
+import { SalesByCustomerComponent } from './reports/sales/sales-by-customer/sales-by-customer.component';
 
 // Export user-management routes
 export const userManagementRoutes: Routes = [
@@ -56,6 +58,11 @@ export const salesReportRoutes: Routes = [
   {
     path: 'sales-by-region-tabular',
     component: SalesByRegionTabularComponent
+  },
+  // New route for SalesByCustomerComponent
+  {
+    path: 'sales-by-customer',
+    component: SalesByCustomerComponent
   }
 ];
 
