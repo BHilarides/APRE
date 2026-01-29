@@ -5,5 +5,6 @@
   <li>Ben Hilarides</li>
 </ul>
 
-<h3>Testing: npm test/ng test</h3>
-<h3>Run: npm start/ng serve</h3>
+<h2>npm install within client and server folder structures</h2>
+<h2>Testing: npm test/ng test</h2>
+<h2>Run: npm start/ng serve</h2>
