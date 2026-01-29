@@ -1,3 +1,11 @@
+/**
+ * Author: Ben Hilarides
+ * Date: 28 January 2026
+ * File: sales-by-region-tabular.component.ts
+ * Added placeholder for region label in select dropdown
+ */
+
+
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { environment } from '../../../../environments/environment';
@@ -15,6 +23,8 @@ import { TableComponent } from './../../../shared/table/table.component';
         <div class="form__group">
           <label class="label" for="region">Region</label>
           <select class="select" formControlName="region" id="region" name="region">
+            // Added placeholder option below
+            <option value="" disabled selected>Select a Region</option>
             @for(region of regions; track region) {
               <option value="{{ region }}">{{ region }}</option>
             }

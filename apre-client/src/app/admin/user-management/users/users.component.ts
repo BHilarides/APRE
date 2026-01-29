@@ -1,8 +1,15 @@
-import { Component } from '@angular/core';
+/**
+ * Author: Professor Krasso edited by Ben Hilarides
+ * Date: 24 January 2026
+ * File: users.component.ts
+ * Description: Adding display message after creating new user
+ */
+
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
 import { User } from '../user.interface';
-import { RouterLink } from '@angular/router';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { ConfirmDialogComponent } from "../../../shared/confirm-dialog/confirm-dialog.component";
 
 @Component({
@@ -14,6 +21,8 @@ import { ConfirmDialogComponent } from "../../../shared/confirm-dialog/confirm-d
       <h1>Users</h1>
       <a routerLink="/user-management/users/new" class="link button button--primary">Create User</a><br /><br />
 
+      @if (creationMessage) {
+        <div class="message message--success">{{ creationMessage }}</div>}
       @if (deletionMessage) {
         <div class="message message--success">{{ deletionMessage }}</div>
       }
@@ -50,7 +59,7 @@ import { ConfirmDialogComponent } from "../../../shared/confirm-dialog/confirm-d
   styles: `
   `
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
   dialogHeader: string;
   dialogMessage: string;
   deletionMessage: string;
@@ -63,7 +72,22 @@ export class UsersComponent {
     this.dialogHeader = '';
     this.dialogMessage = '';
     this.deletionMessage = '';
+    this.creationMessage = '';
+  }
 
+  ngOnInit() {
+    // Check for success message from user creation
+    this.route.queryParams.subscribe(params => {
+      if (params['created'] === 'true') {
+        // Display creation success message
+        this.creationMessage = 'User created successfully';
+        // Clear the message after 2 seconds
+        setTimeout(() => {
+          this.creationMessage = '';
+        }, 2000);
+      }
+    });
+  
     this.http.get(`${environment.apiBaseUrl}/users`).subscribe({
       next: (users) => {
         this.users = users as Array<User>;
