@@ -1,8 +1,9 @@
 /**
- * Author: Professor Krasso
- * Date: 8/14/24
+ * Author: Professor Krasso | edited by Ben Hilarides
+ * Date: 8/14/24 | 1/31/26
  * File: index.js
- * Description: Apre agent performance API for the agent performance reports
+ * Description: Apre agent performance API for the agent performance reports\
+ * update to include an endpoint to fetch agent performance data by resolution time
  */
 
 'use strict';
@@ -89,6 +90,64 @@ router.get('/call-duration-by-date-range', (req, res, next) => {
     }, next);
   } catch (err) {
     console.error('Error in /call-duration-by-date-range', err);
+    next(err);
+  }
+});
+
+/**
+ * @description
+ *
+ * GET /call-by-resolution-time
+ *
+ * Fetches agent performance data grouped by average resolution time.
+ * Returns agents sorted by average resolution time, fastest first.
+ * 
+ * Example:
+ * fetch('/call-by-resolution-time')
+ *  .then(response => response.json())
+ *  .then(data => console.log(data));
+ */
+router.get('/call-by-resolution-time', (req, res, next) => {
+  try {
+    console.log('Fetching call by resolution time report'); 
+
+    mongo(async db => {
+      const data = await db.collection('agentPerformance').aggregate([
+        {
+          $lookup: {
+            from: 'agents',
+            localField: 'agentId',
+            foreignField: 'agentId',
+            as: 'agentDetails'
+          }
+        },
+        {
+          $unwind: '$agentDetails'
+        },
+        {
+          $group: {
+            _id: '$agentDetails.name',
+            avgResolutionTime: { $avg: '$resolutionTime' },
+            callCount: { $sum: 1 }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            agent: '$_id',
+            avgResolutionTime: { $round: ['$avgResolutionTime', 0] },
+            callCount: 1
+          }
+        },
+        {
+          $sort: { avgResolutionTime: 1 } // Sort by average resolution time ascending
+        }
+      ]).toArray();
+
+      res.send(data);
+    }, next);
+  } catch (err) {
+    console.error('Error in /call-by-resolution-time', err);
     next(err);
   }
 });

@@ -308,12 +308,13 @@ export class MainLayoutComponent {
   salesReports = [
     { name: 'Sales by Region', url: '/reports/sales/sales-by-region' },
     { name: 'Sales by Region - Tabular', url: '/reports/sales/sales-by-region-tabular' },
-    { name: 'Sales by Customer', url: '/reports/sales/sales-by-customer' } // New link for SalesByCustomerComponent
+    { name: 'Sales by Customer', url: '/reports/sales/sales-by-customer' } // Major Task: New link for SalesByCustomerComponent
     // Add more reports as needed
   ];
 
   agentPerformanceReports = [
-    { name: 'Call Duration by Date Range', url: '/reports/agent-performance/call-duration-by-date-range' }
+    { name: 'Call Duration by Date Range', url: '/reports/agent-performance/call-duration-by-date-range' }, 
+    { name: 'Resolution Time', url: '/reports/agent-performance/resolution-time'} // Major task: New link for Resolution Time Component
     // Add more reports as needed
   ];
 

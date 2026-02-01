@@ -3,7 +3,8 @@
  * Date: 8/8/2024 | 24 January 2026
  * File: app.routes.ts
  * Description: Application routes
- * Updated to include routes for SalesByCustomerComponent via Sales Report Routes
+ * Updated to include route for SalesByCustomerComponent via Sales Report Routes
+ * Updated to include route for ResolutionTimeComponent 
  */
 
 // Import the necessary modules
@@ -27,6 +28,7 @@ import { ChannelRatingByMonthComponent } from './reports/customer-feedback/chann
 import { CustomerFeedbackComponent } from './reports/customer-feedback/customer-feedback.component';
 import { SalesByRegionTabularComponent } from './reports/sales/sales-by-region-tabular/sales-by-region-tabular.component';
 import { SalesByCustomerComponent } from './reports/sales/sales-by-customer/sales-by-customer.component';
+import { ResolutionTimeComponent } from './reports/agent-performance/resolution-time/resolution-time.component';
 
 // Export user-management routes
 export const userManagementRoutes: Routes = [
@@ -71,6 +73,10 @@ export const agentPerformanceRoutes: Routes = [
   {
     path: 'call-duration-by-date-range',
     component: CallDurationByDateRangeComponent
+  },
+  {
+    path: 'resolution-time', // Major Task Adding path
+    component: ResolutionTimeComponent // Adding component
   }
 ];
 

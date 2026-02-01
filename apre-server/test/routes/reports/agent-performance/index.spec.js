@@ -1,8 +1,10 @@
 /**
  * Author: Professor Krasso
- * Date: 10 September 2024
+ * Edited By: Ben Hilarides
+ * Date: 10 September 2024 | 31 January 2026
  * File: index.spec.js
  * Description: Test the agent performance API
+ * Added tests for call-by-resolution-time endpoint
  */
 
 // Require the modules
@@ -73,3 +75,67 @@ describe('Apre Agent Performance API', () => {
     });
   });
 });
+
+// Test the call-by-resolution-time endpoint
+describe('Apre Agent Performance API - Call by resolution time', () => {
+  beforeEach(() => {
+    mongo.mockClear();
+  });
+
+  // Test the call-by-resolution-time endpoint
+  it('should fetch agent performance data grouped by resolution time', async () => {
+    mongo.mockImplementation(async (callback) => {
+      const db = {
+        collection: jest.fn().mockReturnThis(),
+        aggregate: jest.fn().mockReturnValue({
+          toArray: jest.fn().mockResolvedValue([
+            { agentId: 'Agent1', avgResolutionTime: 90 },
+            { agentId: 'Agent2', avgResolutionTime: 120}
+          ])
+        })
+      };
+      await callback(db);
+    });
+
+    const response = await request(app).get('/api/reports/agent-performance/call-by-resolution-time'); // Send a GET request to the call-by-resolution-time endpoint
+
+    expect(response.status).toBe(200); // Expect a 200 status code
+
+    // Expect the response body to match the expected data
+    expect(response.body).toEqual([
+      { agentId: 'Agent1', avgResolutionTime: 90 },
+      { agentId: 'Agent2', avgResolutionTime: 120}
+
+    ]);
+  });
+
+  // Test the call-by-resolution-time endpoint with no data
+  it('should return 200 with an empty array if no data is found', async () => {
+    mongo.mockImplementation(async (callback) => {
+      const db = {
+        collection: jest.fn().mockReturnThis(),
+        aggregate: jest.fn().mockReturnValue({
+          toArray: jest.fn().mockResolvedValue([])
+        })
+      };
+      await callback(db);
+    });
+
+    const response = await request(app).get('/api/reports/agent-performance/call-by-resolution-time'); // Send a GET request to the call-by-resolution-time endpoint
+
+    expect(response.status).toBe(200); // Expect a 200 status code
+    // Expect the response body to be an empty array
+    expect(response.body).toEqual([]);
+  });
+
+  it('should return 404 for an invalid endpoint', async () => {
+    const response = await request(app).get('/api/reports/agent-performance/invalid-endpoint'); // Send a GET request to an invalid endpoint
+    expect(response.status).toBe(404); // Expect a 404 status code
+    // Expect the response body to match the expected data
+    expect(response.body).toEqual({
+      message: 'Not Found',
+      status: 404,
+      type: 'error'
+    });
+  });
+})
