@@ -33,6 +33,8 @@ import { TableComponent } from './../../../shared/table/table.component';
         </div>
         <div class="form__actions">
           <!-- Minor Task m-039: Change button from primary to secondary color -->
+          <!-- Was not totally sure, but read through the component around the button, noticed the button class and primary, changed it to secondary to test and confirm -->
+          <!-- Upon confirmation, primary was primary color, thus secondary was the secondary color -->
           <button class="button button--secondary" type="submit">Submit</button>
         </div>
       </form>
