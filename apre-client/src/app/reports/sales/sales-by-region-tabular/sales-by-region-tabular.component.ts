@@ -1,8 +1,9 @@
 /**
  * Author: Ben Hilarides
- * Date: 28 January 2026
+ * Edited: 28 January 2026 | 4 February 2026
  * File: sales-by-region-tabular.component.ts
  * Added placeholder for region label in select dropdown
+ * Changed color of the button in component from primary to secondary color
  */
 
 
@@ -23,7 +24,7 @@ import { TableComponent } from './../../../shared/table/table.component';
         <div class="form__group">
           <label class="label" for="region">Region</label>
           <select class="select" formControlName="region" id="region" name="region">
-            // Added placeholder option below
+            <!-- Minor Task: Added placeholder option below -->
             <option value="" disabled selected>Select a Region</option>
             @for(region of regions; track region) {
               <option value="{{ region }}">{{ region }}</option>
@@ -31,7 +32,8 @@ import { TableComponent } from './../../../shared/table/table.component';
           </select>
         </div>
         <div class="form__actions">
-          <button class="button button--primary" type="submit">Submit</button>
+          <!-- Minor Task m-039: Change button from primary to secondary color -->
+          <button class="button button--secondary" type="submit">Submit</button>
         </div>
       </form>
 
