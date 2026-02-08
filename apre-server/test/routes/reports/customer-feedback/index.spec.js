@@ -1,8 +1,10 @@
 /**
  * Author: Professor Krasso
- * Date: 10 September 2024
+ * Edited by: Ben Hilarides
+ * Date: 10 September 2024 | 2/6/2026
  * File: index.spec.js
  * Description: Test the customer feedback API
+ * Added tests for customer-feedback-by-salesperson API
  */
 
 // Require the modules
@@ -69,6 +71,83 @@ describe('Apre Customer Feedback API', () => {
     expect(response.status).toBe(404); // Expect a 404 status code
 
     // Expect the response body to match the expected data
+    expect(response.body).toEqual({
+      message: 'Not Found',
+      status: 404,
+      type: 'error'
+    });
+  });
+});
+
+// Test the customer feedback API - Feedback by Salesperson
+describe('Apre Customer Feedback API - Feedback by Salesperson', () => {
+  beforeEach(() => {
+    mongo.mockClear();
+  });
+
+  // Test the feedback-by-salesperson endpoint
+  it('should fetch customer feedback data grouped by salesperson', async () => {
+    mongo.mockImplementation(async (callback) => {
+      const db = {
+        collection: jest.fn().mockReturnThis(),
+        aggregate: jest.fn().mockReturnValue({
+          toArray: jest.fn().mockResolvedValue([
+            {
+              salesperson: 'Michael Scott', 
+              avgRating: 4.5, 
+              feedbackCount: 10 
+            },
+            {
+              salesperson: 'Jim Halpert',
+              avgRating: 4.2,
+              feedbackCount: 8
+            }
+          ])
+        })
+      };
+      await callback(db);
+    });
+
+    const response = await request(app).get('/api/reports/customer-feedback/feedback-by-salesperson');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([
+      {
+        salesperson: 'Michael Scott', 
+        avgRating: 4.5, 
+        feedbackCount: 10 
+      },
+      {
+        salesperson: 'Jim Halpert',
+        avgRating: 4.2,
+        feedbackCount: 8
+      }
+    ]);
+  });
+
+  // Test the feedback-by-salesperson endpoint with no data
+  it('should return 200 with an empty array if no feedback data is found', async () => {
+    mongo.mockImplementation(async (callback) => {
+      const db = {
+        collection: jest.fn().mockReturnThis(),
+        aggregate: jest.fn().mockReturnValue({
+          toArray: jest.fn().mockResolvedValue([])
+        })
+      };
+      await callback(db);
+    });
+
+    const response = await request(app).get('/api/reports/customer-feedback/feedback-by-salesperson');
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([]);
+  });
+
+  // Test for invalid endpoint
+  it('should return 404 for an invalid endpoint', async() => {
+    const response = await request(app).get('/api/reports/customer-feedback/invalid-endpoint');
+
+    expect(response.status).toBe(404);
     expect(response.body).toEqual({
       message: 'Not Found',
       status: 404,

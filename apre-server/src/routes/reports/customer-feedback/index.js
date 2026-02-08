@@ -1,8 +1,10 @@
 /**
  * Author: Professor Krasso
- * Date: 8/14/24
+ * Edited By: Ben Hilarides
+ * Date: 8/14/24 | 2/6/2026
  * File: index.js
  * Description: Apre customer feedback API for the customer feedback reports
+ * Added an API to fetch customer feedback data by salesperson
  */
 
 'use strict';
@@ -88,6 +90,54 @@ router.get('/channel-rating-by-month', (req, res, next) => {
 
   } catch (err) {
     console.error('Error in /rating-by-date-range-and-channel', err);
+    next(err);
+  }
+});
+
+/**
+ * @description
+ *
+ * GET /feedback-by-salesperson
+ *
+ * Fetches customer feedback data grouped by salesperson.
+ * Returns average rating and feedback count per salesperson, sorted by rating.
+ *
+ * Example:
+ * fetch('/feedback-by-salesperson')
+ *  .then(response => response.json())
+ *  .then(data => console.log(data));
+ */
+
+router.get('/feedback-by-salesperson', (req, res, next) => {
+  try {
+    console.log('Fetching customer feedback data by salesperson');
+
+    mongo(async db => {
+      const data = await db.collection('customerFeedback').aggregate([
+        {
+          $group: {
+            _id: '$salesperson',
+            avgRating: { $avg: '$rating' },
+            feedbackCount: { $sum: 1 }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            salesperson: '$_id',
+            avgRating: { $round: ['$avgRating', 1] }, // Round to 1 decimal spot
+            feedbackCount: 1 
+          }
+        },
+        {
+          $sort: { avgRating: -1 } // Sort by highest rating first
+        }
+      ]).toArray();
+
+      res.send(data);
+    }, next);
+  } catch (err) {
+    console.error('Error in /feedback-by-salesperson', err);
     next(err);
   }
 });
